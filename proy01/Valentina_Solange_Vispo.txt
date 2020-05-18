@@ -1,0 +1,91 @@
+					PROYECTO 1: "TAD Conjunto finito"
+➢ Materia: Algoritmos y estructura de datos II
+➢ Fecha máxima de entrega: 11/05/2020 - 23:59:59
+➢ Alumna: Valentina Solange, Vispo
+➢ Comisión: Jueves
+➢ Link del ejercicio: https://wiki.cs.famaf.unc.edu.ar/lib/exe/fetch.php?media=algo2:main:ejercicio_tad_conjunto.pdf
+➢ Link de entrega: https://docs.google.com/forms/d/e/1FAIpQLSe8_Udpuqfu8kTfQaSSPe0Xg-SDQG7dYEJqvMbVzUhMBybxWQ/viewform
+---------------------------------------------------------------------------------------------------------------------
+				*** COMANDOS PARA CORRER  EL PROGRAMA ***
+
+gcc -Wall -Werror -Wextra -pedantic -std=c99 -c test_set.c
+gcc -Wall -Werror -Wextra -pedantic -std=c99 -c set.c
+gcc -Wall -Werror -Wextra -pedantic -no-pie -std=c99 -o test_s list-x86_64.o set.o test_set.o
+./test_s
+
+			*** COMANDOS PARA CORRER  EL PROGRAMA (MEMORY LEAKS)***
+
+gcc -Wall -Werror -Wextra -pedantic -std=c99 -c test_set.c
+gcc -Wall -Werror -Wextra -pedantic -std=c99 -c set.c
+gcc -Wall -Werror -Wextra -pedantic -no-pie -std=c99 -o test_s list-x86_64.o set.o test_set.o
+valgrind --show-reachable=yes --leak-check=full ./test_s
+
+---------------------------------------------------------------------------------------------------------------------
+					*** Comentarios ***
+
+➢ Tuve en cuenta la implementación del pseudocódigo del ejercicio entregable 1 (Link de la cátedra: https://wiki.cs.famaf.unc.edu.ar/lib/exe/fetch.php?media=algo2:main:ejercicio_tad_conjunto.pdf) que implementé yo para entregar dicho ejercicio, me di cuenta de unos cuántos errores que tenían mis funciones en dicho pseudocódigo. Esos errores los corregí al escribirlos en C.
+➢ Link de mi ejercicio entregado TAD conjunto: https://drive.google.com/file/d/10tXw70-ypmvDhb7eYJa72S1fxe96uQmf/view?usp=sharing
+
+➢ Supuse que los conjuntos cumplen las condiciones de TAD, ya que están implmentandos con listas.
+
+➢ No agregué para ingresar por teclado cuando se corre el programa, se debe cambiar escribiendo nuevo código o modificando lo ya escrito. Todo esto en el archivo test_set.c
+
+➢ Considero que la POS de set_inters y set_dif están incorrectas ¿Por qué? No se me ocurrió la forma de escribir lo siguiente:
+
+	// set_inters(s, s0) Elimina de 's' todos los elementos que NO pertenezcan a 's0'.
+	En set_inters(s, s0): "set_cardinal(s) = N - (cantidad de elementos que pertenecen a 's0' pero NO a 's')"
+
+	// set_dif(s, s0) Elimina de 's' todos los elementos que pertenecen a 's0'.
+	En set_dif(s, s0): "set_cardinal(s) = N - (cantidad de elementos que pertenecen a 's0' y 's')"
+
+	Esto no lo supe escribir porque puede ser el caso de que más de un elemento pertenezca (o no) a ambos conjuntos y se eliminen.
+
+	Ejemplos:
+
+	s = {1 2 3 4 5}        	set_cardinal(s) = 5 == N
+	s0 = {0 2 3 4 5 6}	set_cardinal(s0) = 6 == M
+
+	Dónde: 
+	s = set_inters(s, s0) sería s = {2 3 4 5} y set_cardinal(s) = 4 porque son 4 la cantidad de elementos que pertenecen a 's0' pero NO a 's'
+
+	Pero
+	s = set_dif(s, s0) sería s = {1} y set_cardinal(s) = 1 porque son 4 la cantidad de elementos que pertenecen a 's0' y 's'
+
+	La implementación que hice no tiene ningún contador de cuantas veces se cumple o no esto
+
+	Traté de pensarlo de la siguiente manera pero no sé si sería correcto: 
+
+	// SET_INTERS
+	{s != NULL /\ s0 != NULL /\ set_cardinal(s) == N /\ s1 = set_copy(s) /\ s1 = dif(s1, s0) /\ set_cardinal(s1) == P}
+	s = set_inters(s, s0);
+	{set_cardinal(s) == N - P}
+
+	s1 = {1} 		set_cardinal(s1) = 1 == P
+
+	set_cardinal(s) = N - P = 5 - 1 = 4
+
+	// SET_DIF
+	{s != NULL /\ s0 != NULL /\ set_cardinal(s0) == M /\ s1 = set_copy(s) /\ s1 = set_inter(s1, s0) /\ set_cardinal(s1) == P}
+	s = set_dif(s, s0);
+	{set_cardinal(s) == N - P}
+
+	s1 = {2 3 4 5}		set_cardinal(s1) = 4 == P
+
+	set_cardinal(s) = N - P = 5 - 4 = 1
+
+	Llegué a esta conclusión tratando de pensarlo de la misma forma que set_union(s, s0)
+
+➢ La función get, en su DES decía: "Obtiene algún elemento cualquiera del conjunto 's'." pero la implementación que realicé SIEMPRE devolverá el primer elemento (por eso cambié la DES).
+
+➢ En set.h había hecho los AND como &&, luego los cambié por /\, por si quedó alguno que no haya cambiado.
+
+➢ Corregí el siguiente error de la entrega anterior:  ̶E̶n̶ ̶s̶e̶t̶_̶d̶e̶s̶t̶r̶o̶y̶ ̶h̶i̶c̶e̶ ̶q̶u̶e̶ ̶e̶l̶ ̶c̶o̶n̶j̶u̶n̶t̶o̶ ̶s̶e̶a̶ ̶v̶a̶c̶í̶o̶ ̶e̶n̶ ̶v̶e̶z̶ ̶d̶e̶ ̶N̶U̶L̶L̶.
+
+➢ Corregí el siguiente error de la entrega anterior:  ̶ ̶u̶n̶i̶o̶n̶0̶ ̶=̶ ̶s̶e̶t̶_̶u̶n̶i̶o̶n̶(̶u̶n̶i̶o̶n̶1̶,̶ ̶u̶n̶i̶o̶n̶0̶)̶;̶ no era correcto y lo cambié por union0 = set_union(union0, union1); ¿Por qué? había ingreado mal los argumentos y me generaba errores.
+
+➢ Hice más eficiente la función unsigned int set_cardinal(set s);
+
+➢ Esto es una reentrega, encontré errores en el anterior.
+
+					*** Fin comentarios ***
+---------------------------------------------------------------------------------------------------------------------
